@@ -1,11 +1,16 @@
 # stage1 as builder
 FROM node:latest as builder
+LABEL maintainer="zahid shakeel"
+LABEL lastBuildDate="06/07/2020"
+LABEL stage="build"
+LABEL description="The app is build here"
+
 # Add a user to the container and provide necessary permissions
 RUN useradd -ms /bin/bash zahid
 
 WORKDIR /app
 
-RUN chown -R zahid:zahid /app && chmod 777 /app
+RUN chown -R zahid:zahid /app && chmod 700 /app
 
 USER zahid
 
@@ -24,10 +29,12 @@ RUN npm run build
 
 
 FROM nginx:alpine
+LABEL stage="deploy"
+LABEL desription="The app is deployed here"
 
 RUN adduser -S zahid
 
-RUN chown -R zahid /etc/nginx && chmod 777 /etc/nginx && chown -R zahid /usr/share/nginx && chmod 777 /usr/share/nginx
+RUN chown -R zahid /etc/nginx && chmod 700 /etc/nginx && chown -R zahid /usr/share/nginx && chmod 700 /usr/share/nginx
 
 USER zahid
 
